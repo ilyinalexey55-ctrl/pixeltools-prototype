@@ -4,6 +4,8 @@ let selectedProject = 'user';
 let demoWelcomeOpen = false;
 let tourActive = false;
 let tourFinished = false;
+let demoTourIntroSeen = false;
+let demoOnboardingDismissed = false;
 let purchaseOpen = false;
 let scrollPopupShown = false;
 let scrollPopupDismissed = false;
@@ -25,7 +27,7 @@ function go(nextRoute) {
     purchaseOpen = false;
   }
   route = nextRoute;
-  demoWelcomeOpen = selectedProject === 'demo' && nextRoute === 'summary' && !sessionStorage.getItem('demo-tour-intro-seen') && !sessionStorage.getItem('demo-onboarding-dismissed');
+  demoWelcomeOpen = selectedProject === 'demo' && nextRoute === 'summary' && !demoTourIntroSeen && !demoOnboardingDismissed;
   render();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -33,7 +35,7 @@ function go(nextRoute) {
 function selectProject(project) {
   selectedProject = project;
   route = project === 'demo' ? 'summary' : 'user';
-  demoWelcomeOpen = project === 'demo' && !sessionStorage.getItem('demo-tour-intro-seen') && !sessionStorage.getItem('demo-onboarding-dismissed');
+  demoWelcomeOpen = project === 'demo' && !demoTourIntroSeen && !demoOnboardingDismissed;
   if (project === 'user') tourActive = false;
   render();
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -41,8 +43,8 @@ function selectProject(project) {
 
 function closeWelcome() {
   demoWelcomeOpen = false;
-  sessionStorage.setItem('demo-tour-intro-seen', '1');
-  sessionStorage.setItem('demo-onboarding-dismissed', '1');
+  demoTourIntroSeen = true;
+  demoOnboardingDismissed = true;
   tourActive = false;
   render();
 }
@@ -51,7 +53,7 @@ function startTour() {
   demoWelcomeOpen = false;
   tourActive = true;
   tourFinished = false;
-  sessionStorage.setItem('demo-tour-intro-seen', '1');
+  demoTourIntroSeen = true;
   render();
 }
 
@@ -59,7 +61,7 @@ function stopTour() {
   demoWelcomeOpen = false;
   tourActive = false;
   tourFinished = true;
-  sessionStorage.setItem('demo-onboarding-dismissed', '1');
+  demoOnboardingDismissed = true;
   render();
 }
 
@@ -68,7 +70,7 @@ function finishTour() {
   tourActive = false;
   tourFinished = true;
   purchaseOpen = true;
-  sessionStorage.setItem('demo-onboarding-dismissed', '1');
+  demoOnboardingDismissed = true;
   render();
 }
 

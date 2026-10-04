@@ -162,7 +162,7 @@ function tourHint() {
 }
 
 function userPage() {
-  return `<div class="banner"><span class="banner-text"><span class="banner-icon">ⓘ</span>Вы находитесь в ограниченном демо-режиме. Получите полный доступ!</span><button class="btn btn-primary" data-project="demo">Посмотреть демо-отчёт</button></div><div class="title-row"><div>${projectSwitcher()}<small class="muted">Проектов: 1 · Последнее обновление: —</small></div><button class="btn btn-outline">Обновить проект⌄</button></div><section class="plan-card"><h2>Следуйте плану для поднятия видимости</h2><div class="steps">${['Получите полный доступ','Запустите проект','Оцените видимость','Оцените конкурентов','Оцените аудит','Выполните рекомендации'].map((x,i)=>`<div class="step ${i===0?'current':''}"><span class="step-dot">${i+1}</span>${x}</div>`).join('')}</div><div class="paywall"><h3>Шаг 1. Получите полный доступ за 99 рублей</h3><p>Пробный период на 30 дней — получите мгновенный анализ упоминаний, тональности и конкурентного окружения в ответах популярных нейросетей.</p><div class="paywall-actions"><button class="btn btn-primary" data-route="payment">Получить доступ за 99 ₽</button><button class="btn btn-outline" data-project="demo">Посмотреть демо-отчет</button></div><div class="demo-hint">Посмотрите пример готового отчета и оцените возможности сервиса перед оплатой.</div></div></section><div class="title-row"><h1>Сводка</h1><span class="muted">Экспорт (Excel)⌄ &nbsp; ⚙ Настроить сводку</span></div>${filters()}<div class="locked-grid"><div class="blur-card wide"><h3>Общая видимость</h3><div class="fake-lines"><div class="fake-line"></div><div class="fake-line short"></div><div class="fake-line"></div></div><div class="locked-note"><div><div class="lock-icon">◌</div><strong>Данные будут доступны после оплаты пробного периода</strong><button class="btn btn-primary" data-route="payment" style="margin-top:12px">Доступ за 99 рублей на 30 дней</button></div></div></div>${['Конкуренты','Упоминания бренда','Тональность упоминаний','Видимость по группам промптов','События'].map(x=>`<div class="blur-card"><h3>${x}</h3><div class="fake-lines"><div class="fake-line"></div><div class="fake-line short"></div><div class="fake-line"></div></div></div>`).join('')}</div>`;
+  return `<div class="banner"><span class="banner-text"><span class="banner-icon">ⓘ</span>Вы находитесь в ограниченном демо-режиме. Получите полный доступ!</span><button class="btn btn-primary" data-project="demo">Посмотреть демо-отчёт</button></div><div class="title-row"><div>${projectSwitcher()}<small class="muted">Проектов: 1 · Последнее обновление: —</small></div><button class="btn btn-outline">Обновить проект⌄</button></div><section class="plan-card"><h2>Следуйте плану для поднятия видимости</h2><div class="steps">${['Получите полный доступ','Запустите проект','Оцените видимость','Оцените конкурентов','Оцените аудит','Выполните рекомендации'].map((x,i)=>`<div class="step ${i===0?'current':''}"><span class="step-dot">${i+1}</span>${x}</div>`).join('')}</div><div class="paywall"><h3>Шаг 1. Получите полный доступ за 99 рублей</h3><p>Пробный период на 30 дней — получите мгновенный анализ упоминаний, тональности и конкурентного окружения в ответах популярных нейросетей.</p><div class="paywall-actions"><button class="btn btn-primary" data-route="payment">Получить доступ за 99 ₽</button><button class="btn btn-outline" data-project="demo">Посмотреть демо-отчет</button></div><div class="demo-hint">Посмотрите пример готового отчета и оцените возможности сервиса перед оплатой.</div></div></section><div class="title-row"><h1>Сводка</h1><span class="muted">Экспорт (Excel)⌄ &nbsp; ⚙ Настроить сводку</span></div>${filters()}<div class="locked-grid"><div class="blur-card wide"><h3>Общая видимость</h3><div class="fake-lines"><div class="fake-line"></div><div class="fake-line short"></div><div class="fake-line"></div></div><div class="locked-note"><div><div class="lock-icon">◌</div><strong>Данные будут доступны после оплаты пробного периода</strong><button class="btn btn-primary" data-route="payment" style="margin-top:12px">Доступ за 99 рублей на 30 дней</button></div></div></div>${['Конкуренты','Упоминания бренда','Тональность упоминаний','Доля упоминаний (Share of Voice)','Видимость по группам промптов','События','Отзывы','Рекомендации по улучшению видимости'].map(x=>`<div class="blur-card"><h3>${x}</h3><div class="fake-lines"><div class="fake-line"></div><div class="fake-line short"></div><div class="fake-line"></div></div></div>`).join('')}</div>`;
 }
 
 function modal() {
@@ -192,9 +192,11 @@ function render() {
   app.querySelectorAll('[data-close-popup]').forEach(el => el.addEventListener('click', () => { scrollPopupShown = false; if (popupPhase === 'initial') scrollPopupDismissed = true; render(); }));
 }
 
-window.addEventListener('scroll', () => {
+function handleScroll() {
+  const scrollableHeight = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+  const scrollProgress = window.scrollY / scrollableHeight;
   const atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 120;
-  if (route === 'user' && !scrollPopupShown && !scrollPopupDismissed && window.scrollY > document.documentElement.scrollHeight * .32) {
+  if (route === 'user' && !scrollPopupShown && !scrollPopupDismissed && scrollProgress >= .35) {
     popupPhase = 'initial';
     scrollPopupShown = true;
     render();
@@ -204,6 +206,9 @@ window.addEventListener('scroll', () => {
     scrollPopupShown = true;
     render();
   }
-});
+}
+
+window.addEventListener('scroll', handleScroll, { passive: true });
+document.addEventListener('scroll', handleScroll, { passive: true });
 
 render();

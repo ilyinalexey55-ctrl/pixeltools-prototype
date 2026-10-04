@@ -43,7 +43,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid #6faef0; outline-offs
 .side-item.active::before { content: ""; position: absolute; left: -15px; width: 3px; height: 25px; border-radius: 0 3px 3px 0; background: var(--red); }
 .side-item.disabled { opacity: .46; cursor: default; }
 
-.content { margin-left: var(--sidebar); padding: 26px 30px 80px; max-width: 1440px; }
+.content { width: calc(100% - var(--sidebar)); margin-left: var(--sidebar); padding: 26px 30px 80px; }
 .banner { min-height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 14px 22px; margin-bottom: 18px; background: var(--blue); color: #31465a; font-size: 15px; font-weight: 600; }
 .banner.dark { background: linear-gradient(100deg, #416d93, #174366); color: white; min-height: 126px; font-size: 24px; line-height: 1.25; padding: 22px 28px; }
 .banner.dark .banner-copy { max-width: 710px; }
@@ -206,6 +206,12 @@ th { color: #747980; font-weight: 700; background: #f0f1f2; }
   .recommend-stats { grid-template-columns: 120px 1fr 1fr; }
   .recommend-stats .stat:nth-child(4), .recommend-stats .stat:nth-child(5) { grid-column: span 1; }
 }
+@media (max-width: 1180px) {
+  .recommend-stats { grid-template-columns: 130px repeat(2, 1fr); }
+  .recommend-stats .stat:nth-child(4), .recommend-stats .stat:nth-child(5) { grid-column: span 1; }
+  .rec-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .banner { padding-left: 18px; padding-right: 18px; }
+}
 @media (max-width: 640px) {
   :root { --sidebar: 58px; }
   .topbar { padding: 0 12px; gap: 12px; }
@@ -236,4 +242,8 @@ th { color: #747980; font-weight: 700; background: #f0f1f2; }
   .final-cta { align-items: flex-start; flex-direction: column; }
   .payment-layout { grid-template-columns: 1fr; }
   .payment-shell { margin-top: 4px; }
+  .topbar { height: 50px; }
+  .topbar-user { max-width: 126px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .topbar-user .avatar { flex: 0 0 28px; }
+  .title-row .muted { font-size: 12px; }
 }
